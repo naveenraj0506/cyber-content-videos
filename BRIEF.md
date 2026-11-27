@@ -15,7 +15,7 @@ where that assumption breaks. Define every term on first use.
 - Concept first. Real incidents appear only as a short payoff at the end.
 - Backlog: Partitioning Oracle attacks, WorstFit (CVE-2024-4577), Psychic
   Signatures (CVE-2022-21449), Unicode case-mapping collisions.
-- Done: Invisible Salamanders (2026-11-27).
+- Done: Invisible Salamanders (scheduled 2026-11-28 16:00 IST).
 
 ## Accuracy (strict)
 - Every claim is checked against primary sources (papers, CVE advisories,
@@ -35,3 +35,14 @@ where that assumption breaks. Define every term on first use.
 - Bold captions word by word: white, with the key word in yellow.
 - Progress bar at the top. No topic watermark or header.
 - AI voiceover. Music must be royalty-free or generated in code.
+
+## Posting schedule (YouTube, Asia/Calcutta)
+Based on Metricool's best-time data for the channel (checked 2026-11-28):
+- 2 a day: **10:00** and **16:00**
+- 3 a day: **10:00**, **13:00**, **16:00**
+- Weekdays are much stronger than weekends. The 16:00 slot peaks every day.
+
+## Published log
+| Date (IST) | Topic | Metricool post |
+|---|---|---|
+| 2026-11-28 16:00 | Invisible Salamanders (v3) | id 444814380 |
