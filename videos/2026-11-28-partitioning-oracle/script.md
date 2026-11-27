@@ -9,6 +9,11 @@ batch, and the attacker finds it by offline trial decryption of the reply.
 Simulations: 1 in 5 passwords recovered with 124 packets vs ~60,000 for plain
 guessing. (Len, Grubbs, Ristenpart, USENIX Security 2021, §1, §4.)
 
+## v3.1 changes
+- Clarified that it's network encryption: a password shared by client and proxy is hashed into a symmetric secret key that encrypts the traffic (§4: "password-based AEAD with a user-chosen password shared between a client and the proxy server"; "hashing the user password to obtain a key"). It's not a private key or an app login.
+- New line: the attack works because passwords are guessable, and the attacker orders batches by likelihood using breach data (§4: subsets with "maximum aggregate probability"; training on breach data).
+- QA re-run: PASS; 75.8 s; −14.1 LUFS; 9:16.
+
 ## Changes from v2 (review findings)
 - Accuracy: removed the "split in half / twenty questions" section. The 124-try
   result comes from 4,091-password batches plus offline checking, not halving.
@@ -26,12 +31,13 @@ guessing. (Len, Grubbs, Ristenpart, USENIX Security 2021, §1, §4.)
 |---|-----|------|
 | 1 | Mina | 4,091 passwords… in one try. Want to see how? |
 | 2 | Rio | Online? No way. That's one guess per try. |
-| 3 | Mina | Picture a server that hides behind a password. Send the wrong one… and it says nothing. No error. Just silence. |
+| 3 | Mina | Picture a proxy server, kind of like a VPN. You and the server share a password, and it becomes the secret key that encrypts your traffic. Send a packet locked with the wrong password… and it says nothing. No error. Just silence. |
 | 4 | Rio | So I can't even tell if I'm close. |
 | 5 | Mina | But send the right one, and the server quietly opens a door to wait for a reply. You can see that door from outside. That's a leak. A simple yes or no. |
 | 6 | Mina | Now the twist. Some encryption, like AES-GCM, lets you build one message that unlocks with thousands of passwords. |
 | 7 | Rio | Wait. One message… thousands of passwords? |
 | 8 | Mina | 4,091 of them. Door stays shut? All 4,091 are wrong. Crossed off in one go. Door opens? The password is in that batch, and the attacker finds it offline. |
+| 8b | Mina | And it works because people pick guessable passwords. The attacker tests the most common ones first. |
 | 9 | Rio | Does that actually work? |
 | 10 | Mina | In simulations with real leaked passwords, one in five was cracked in just 124 tries. Normal guessing? Around 60,000. |
 | 11 | Mina | It's called a partitioning oracle attack. Researchers found it in a real proxy tool, Shadowsocks, and helped fix it. |
@@ -49,7 +55,8 @@ guessing. (Len, Grubbs, Ristenpart, USENIX Security 2021, §1, §4.)
 - **Description:**
   The server never says "wrong password". It doesn't need to. 🤫
 
-  This server stays silent when the password is wrong, but quietly opens a door
+  Shadowsocks, a VPN-like proxy, encrypts traffic with a key made from a shared
+  password. It stays silent when the password is wrong, but quietly opens a door
   (a network port) when it's right. With AES-GCM, one message can test 4,091
   passwords at once. In simulations with real leaked passwords, 1 in 5 were
   cracked in just 124 tries. Normal guessing needed ~60,000.

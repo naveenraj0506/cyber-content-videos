@@ -46,12 +46,13 @@ QA = []   # list of failure strings
 LINES = [
  ("mina", "C", "*4,091* passwords... in one try. Want to see how?"),
  ("rio", "C", "Online? No way. That's one guess per try."),
- ("mina", "D", "Picture a server that hides behind a password. Send the wrong one... and it says *nothing*. No error. Just silence."),
+ ("mina", "D", "Picture a proxy server, kind of like a VPN. You and the server share a *password*, and it becomes the *secret* *key* that encrypts your traffic. Send a packet locked with the wrong password... and it says *nothing*. No error. Just silence."),
  ("rio", "C", "So I can't even tell if I'm close."),
  ("mina", "D", "But send the *right* one, and the server quietly opens a *door* to wait for a reply. You can see that door from outside. That's a *leak*. A simple yes or no."),
  ("mina", "C", "Now the twist. Some encryption, like AES-GCM, lets you build one message that unlocks with *thousands* of passwords."),
  ("rio", "C", "Wait. One message... thousands of passwords?"),
  ("mina", "D", "*4,091* of them. Door stays *shut*? All 4,091 are wrong. Crossed off in one go. Door *opens*? The password is in that batch, and the attacker finds it *offline*."),
+ ("mina", "D", "And it works because people pick *guessable* passwords. The attacker tests the *most* *common* ones first."),
  ("rio", "C", "Does that actually work?"),
  ("mina", "D", "In simulations with real leaked passwords, one in five was cracked in just *124* tries. Normal guessing? Around *60,000*."),
  ("mina", "C", "It's called a *partitioning* *oracle* attack. Researchers found it in a real proxy tool, Shadowsocks, and helped fix it."),
@@ -138,7 +139,7 @@ BOOM = np.sin(2 * np.pi * np.cumsum(70 * np.exp(-x * 2.5) + 35) / SR) * np.exp(-
 x2 = np.arange(int(0.12 * SR)) / SR; BLIP = np.sin(2 * np.pi * 880 * x2) * np.exp(-x2 * 30) * 0.12
 x3 = np.arange(int(0.4 * SR)) / SR
 WHOOSH = np.convolve(np.random.default_rng(2).standard_normal(len(x3)), np.ones(40) / 40, "same") * np.sin(np.pi * x3 / x3[-1]) * 0.3
-BOOMS = [W_(0, "4091"), W_(5, "twist"), W_(10, "partitioning")]
+BOOMS = [W_(0, "4091"), W_(5, "twist"), W_(11, "partitioning")]
 for b in BOOMS: add(BOOM, b)
 prev = "C"
 for L_ in LINES:
@@ -194,9 +195,9 @@ STYLE = {
  "mina": dict(x=790, face=-1, skin=(222, 172, 140), hair=(70, 50, 50), top=(40, 160, 150), pants=(150, 150, 160), hairstyle="bun"),
 }
 FEET = 1640
-SURPRISE = [(LS(1), LS(1) + 0.8), (LS(6), LE(6) + 0.3), (W_(9, "124") - 0.2, LE(9) + 0.5)]
+SURPRISE = [(LS(1), LS(1) + 0.8), (LS(6), LE(6) + 0.3), (W_(10, "124") - 0.2, LE(10) + 0.5)]
 SHRUG = [(LS(3), LE(3) + 0.3)]
-SMIRK = [(LS(0), LE(0)), (LS(5), LE(5)), (LS(10), LE(10))]       # Mina's knowing look
+SMIRK = [(LS(0), LE(0)), (LS(5), LE(5)), (LS(11), LE(11))]       # Mina's knowing look
 
 def draw_char(d, name, t, fi):
     st = STYLE[name]; S = SS; f = st["face"]; x0 = st["x"]
@@ -339,8 +340,11 @@ at(W_(0, "4091"), LE(0), lambda d: (ctext(d, (540, 400), "4,091", BIGN, YEL), ct
 # 1 (C)
 at(LS(1), LE(1), sign("1 guess = 1 try", RED), "one-guess")
 # 2 (D) silent server
-at(LS(2), LE(2), lambda d: (server(d, 760, 470), ctext(d, (760, 640), "SERVER", LBL_S, DIM),
-                            ctext(d, (300, 340), "password-protected", LBL_S, DIM)), "server")
+at(LS(2), LE(2), lambda d: (server(d, 760, 470), ctext(d, (760, 640), "PROXY SERVER", LBL_S, DIM),
+                            ctext(d, (300, 340), "VPN-like proxy", LBL, WHITE)), "server")
+at(W_(2, "password"), W_(2, "nothing"), lambda d: (ctext(d, (540, 720), "you + server share it", LBL_S, DIM), box(d, (60, 760, 330, 880), WHITE), ctext(d, (195, 820), "password", LBL_S, WHITE),
+                                                arrow(d, (338, 820), (392, 820)), box(d, (400, 760, 660, 880)), ctext(d, (530, 820), "secret key", LBL_S, YEL),
+                                                arrow(d, (668, 820), (722, 820)), box(d, (730, 760, 1020, 880), GREEN), ctext(d, (875, 820), "encrypted", LBL_S, GREEN)), "pw-key")
 at(W_(2, "wrong"), LE(2), lambda d: (box(d, (70, 420, 500, 520), RED), ctext(d, (285, 470), "wrong password", LBL_S, RED),
                                      arrow(d, (510, 470), (595, 470), RED)), "wrong")
 at(W_(2, "nothing"), LE(2), lambda d: (ctext(d, (540, 850), "NO ERROR.", TITLE, WHITE), ctext(d, (540, 980), "JUST SILENCE.", TITLE, DIM)), "silence")
@@ -355,6 +359,7 @@ at(W_(4, "door"), LE(4), lambda d: (door(d, 250, 860, True, GREEN), ctext(d, (65
 at(W_(4, "see"), LE(4), lambda d: ctext(d, (650, 950), "visible from outside", LBL_S, YEL), "visible")
 at(W_(4, "leak"), LE(4), lambda d: (box(d, (110, 1040, 970, 1150)), ctext(d, (540, 1095), "LEAK = a yes / no answer", LBL, YEL)), "leak")
 # 5-6 (C) twist
+at(W_(5, "twist"), W_(5, "thousands"), sign(["THE TWIST", "AES-GCM"], YEL), "twist-title")
 at(W_(5, "thousands"), LE(5), sign(["1 message", "unlocks with 1000s of passwords"], YEL), "twist")
 at(LS(6), LE(6), sign("one message?!", WHITE), "one-message", blip=False)
 # 7 (D) batches of 4,091
@@ -375,23 +380,33 @@ at(T_OPEN, LE(7), lambda d: (door(d, 540, 470, True, GREEN), ctext(d, (540, 640)
 at(T_OPEN, T_OFF, grid("open"), "grid-open")
 at(T_OFF, LE(7), lambda d: (box(d, (70, 700, 1010, 1100), GREEN), ctext(d, (540, 820), "checked offline", LBL, WHITE),
                             ctext(d, (540, 930), "✔ password found", TITLE, GREEN)), "found")
-# 8 (C)
-at(LS(8), LE(8), sign("does it actually work?", WHITE), "work", blip=False)
+# 8 (D) why it works: guessable passwords, most likely first
+def ranked(d):
+    ctext(d, (540, 340), "WHY IT WORKS", TITLE, YEL)
+    ctext(d, (540, 440), "people pick guessable passwords", LBL_S, WHITE)
+    for i, wdt in enumerate([860, 700, 560, 430, 320, 230]):
+        y_ = 540 + i * 80
+        d.rounded_rectangle((110, y_, 110 + wdt, y_ + 52), 10, fill=YEL if i < 3 else (120, 110, 60))
+        ctext(d, (80, y_ + 26), f"#{i + 1}", font("Inter-SemiBold.otf", 32), DIM)
+at(LS(8), LE(8), ranked, "ranked")
+at(W_(8, "most"), LE(8), lambda d: (box(d, (110, 1040, 970, 1150)), ctext(d, (540, 1095), "most common passwords tested first", LBL_S, YEL)), "most-common")
+# 9 (C)
+at(LS(9), LE(9), sign("does it actually work?", WHITE), "work", blip=False)
 # 9 (D) stats: rows visible from the start, numbers land on the words
-T124, T60 = W_(9, "124"), W_(9, "60000")
-at(LS(9), LE(9), lambda d: (ctext(d, (540, 340), "simulated with real leaked passwords", LBL_S, DIM),
+T124, T60 = W_(10, "124"), W_(10, "60000")
+at(LS(10), LE(10), lambda d: (ctext(d, (540, 340), "simulated with real leaked passwords", LBL_S, DIM),
                             ctext(d, (540, 420), "1 in 5 passwords cracked", LBL, WHITE),
                             ctext(d, (210, 600), "this trick", LBL_S, YEL), ctext(d, (210, 820), "guessing", LBL_S, RED)), "stats")
-at(LS(9), T124, lambda d: ctext(d, (600, 600), "? tries", LBL, DIM), "q1", blip=False)
-at(T124, LE(9), lambda d: (d.rounded_rectangle((360, 570, 390, 630), 6, fill=YEL), ctext(d, (560, 600), "124 tries", LBL, YEL)), "n124")
-at(LS(9), T60, lambda d: ctext(d, (600, 820), "? tries", LBL, DIM), "q2", blip=False)
-at(T60, LE(9), lambda d: (d.rounded_rectangle((360, 790, 1000, 850), 6, fill=RED), ctext(d, (680, 920), "~60,000 tries", LBL, RED)), "n60k")
+at(LS(10), T124, lambda d: ctext(d, (600, 600), "? tries", LBL, DIM), "q1", blip=False)
+at(T124, LE(10), lambda d: (d.rounded_rectangle((360, 570, 390, 630), 6, fill=YEL), ctext(d, (560, 600), "124 tries", LBL, YEL)), "n124")
+at(LS(10), T60, lambda d: ctext(d, (600, 820), "? tries", LBL, DIM), "q2", blip=False)
+at(T60, LE(10), lambda d: (d.rounded_rectangle((360, 790, 1000, 850), 6, fill=RED), ctext(d, (680, 920), "~60,000 tries", LBL, RED)), "n60k")
 # 10 (C)
-at(W_(10, "partitioning"), LE(10), lambda d: (d.rounded_rectangle((90, 320, 990, 590), 24, fill=(200, 40, 50, 255), outline=INK, width=8),
+at(W_(11, "partitioning"), LE(11), lambda d: (d.rounded_rectangle((90, 320, 990, 590), 24, fill=(200, 40, 50, 255), outline=INK, width=8),
                                               ctext(d, (540, 410), "PARTITIONING", font(XB, 98), WHITE), ctext(d, (540, 515), "ORACLE ATTACK", font(XB, 84), YEL)), "name")
-at(W_(10, "shadowsocks"), LE(10), lambda d: (box(d, (140, 650, 940, 760), GREEN), ctext(d, (540, 705), "found in Shadowsocks · fixed ✔", LBL_S, GREEN)), "fixed")
+at(W_(11, "shadowsocks"), LE(11), lambda d: (box(d, (140, 650, 940, 760), GREEN), ctext(d, (540, 705), "found in Shadowsocks · fixed ✔", LBL_S, GREEN)), "fixed")
 # 11 (C) end card
-at(LS(11), TOTAL + 1, lambda d: (ctext(d, (540, 420), "FOLLOW", font(XB, 130), YEL), ctext(d, (540, 545), "◆ 0xLore", ImageFont.truetype(MONOF, 64), WHITE)), "follow")
+at(LS(12), TOTAL + 1, lambda d: (ctext(d, (540, 420), "FOLLOW", font(XB, 130), YEL), ctext(d, (540, 545), "◆ 0xLore", ImageFont.truetype(MONOF, 64), WHITE)), "follow")
 
 # ------------------------------------------------------------------ captions (auto-fit)
 chunks, cur = [], []
