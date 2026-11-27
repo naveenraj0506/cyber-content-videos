@@ -39,13 +39,33 @@ in full on 2026-11-27).
 3. P. Grubbs. *Hunting Invisible Salamanders.* Black Hat USA 2020 slides.
    https://i.blackhat.com/USA-20/Thursday/us-20-Grubbs-Hunting-Invisible-Salamanders-Cryptographic-Insecurity-With-Attacker-Controlled-Keys.pdf
 
-## Draft YouTube metadata
-- **Title:** One Encrypted File, Two Different Files 🤯 #cybersecurity
-- **Description:** AES-GCM never promised that a ciphertext belongs to just
-  one key. Researchers used that to hide an abusive image from Facebook
-  Messenger's report button. Sources: Dodis et al., CRYPTO 2018; Albertini
-  et al., USENIX Security 2022.
-- **Tags:** cybersecurity, cryptography, AES-GCM, encryption, infosec, key
-  commitment
+## v3 changes (all verified, see "Extra verified facts" above)
+- Payoff scene: "In their demo, the recipient got a picture of a salamander…
+  but the abuse report showed a kitten. Facebook called its secret chat
+  messages salamanders. So this one became… an invisible salamander. Facebook
+  patched it, and paid a bug bounty." [1] §1, §3, Fig. 3
+- Brand watermark "◆ DEEP CUT SECURITY" (top right) and cover.jpg.
+
+## YouTube metadata (v3)
+- **Title:** One Encrypted File. Two Secrets. 🦎
+- **Description:**
+  The recipient saw a salamander. Facebook's abuse report saw a kitten.
+  Same encrypted file. 🤯
+
+  AES-GCM, the encryption inside TLS, never promised that a ciphertext
+  belongs to just one key. Researchers used that gap to make Facebook
+  Messenger attachments that couldn't be reported. It's called "Invisible
+  Salamanders".
+
+  📄 Sources
+  • Dodis, Grubbs, Ristenpart, Woodage. "Fast Message Franking: From Invisible
+    Salamanders to Encryptment", CRYPTO 2018
+  • Albertini et al. "How to Abuse and Fix Authenticated Encryption Without
+    Key Commitment", USENIX Security 2022
+
+  Follow Deep Cut Security for more hidden gems of cybersecurity.
+  #cybersecurity #cryptography #infosec #encryption #shorts
+- **Tags:** cybersecurity, cryptography, AES-GCM, encryption, infosec,
+  key commitment, invisible salamanders, facebook messenger
 - **Settings:** type short, madeForKids false, category SCIENCE_TECHNOLOGY,
-  AI-generated content declared (AI voiceover)
+  cover = cover.jpg
