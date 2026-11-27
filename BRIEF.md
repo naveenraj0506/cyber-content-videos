@@ -33,7 +33,8 @@ where that assumption breaks. Define every term on first use.
 - 1080×1920, 30 fps, H.264 MP4. Dark navy background, faint grid, glowing
   yellow diagrams.
 - Bold captions word by word: white, with the key word in yellow.
-- Progress bar at the top. No topic watermark or header.
+- Progress bar at the top. "◆ 0xLore" brand watermark top-right; no topic header.
+- Cover image (cover.jpg) for every Short, branded 0xLore.
 - AI voiceover. Music must be royalty-free or generated in code.
 
 ## Posting schedule (YouTube, Asia/Calcutta)
