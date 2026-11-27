@@ -46,3 +46,23 @@ Every fact cites the paper in the Sources section below (§ = section).
   packet icon fanning out into keys, and the 0xLore brand.
 - **Description hook:** "The server never says 'wrong password'. It doesn't
   need to." Then sources and hashtags.
+
+## Final YouTube metadata (v1 render)
+- **Title:** 124 Packets to Crack a Password 🔓
+- **Description:**
+  The server never says "wrong password". It doesn't need to. 🤫
+
+  Shadowsocks silently drops bad packets, but it opens a port when decryption
+  works. Because AES-GCM isn't key-committing, one packet can be valid for
+  4,091 passwords at once. Each answer cuts the haystack. In simulations with
+  real leaked passwords, 1 in 5 fell after just 124 packets.
+
+  📄 Source
+  • Len, Grubbs, Ristenpart. "Partitioning Oracle Attacks", USENIX Security 2021
+
+  Follow 0xLore for more hidden gems of cybersecurity.
+  #cybersecurity #cryptography #infosec #passwords #shorts
+- **Tags:** cybersecurity, cryptography, partitioning oracle, AES-GCM,
+  shadowsocks, password cracking, key commitment, infosec
+- **Settings:** type short, madeForKids false, category SCIENCE_TECHNOLOGY,
+  cover = cover.jpg
