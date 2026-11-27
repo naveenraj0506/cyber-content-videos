@@ -16,9 +16,9 @@ Still technical enough that a security engineer learns the real mechanism.
 - Hidden gems only. Avoid well-known topics such as confused deputy, SQLi, XSS,
   phishing and Stuxnet.
 - Concept first. Real incidents appear only as a short payoff at the end.
-- Backlog: Partitioning Oracle attacks, WorstFit (CVE-2024-4577), Psychic
+- Backlog: WorstFit (CVE-2024-4577), Psychic
   Signatures (CVE-2022-21449), Unicode case-mapping collisions.
-- Done: Invisible Salamanders (scheduled 2026-11-28 16:00 IST).
+- Done: Invisible Salamanders (scheduled 2026-11-28 16:00 IST), Partitioning Oracle (2026-11-28 02:55 IST).
 
 ## Accuracy (strict)
 - Every claim is checked against primary sources (papers, CVE advisories,
@@ -51,6 +51,7 @@ Based on Metricool's best-time data for the channel (checked 2026-11-28):
 ## Published log
 | Date (IST) | Topic | Metricool post |
 |---|---|---|
+| 2026-11-28 02:55 | Partitioning Oracle (v3.1), published on request | id 444874944 |
 | 2026-11-28 16:00 | Invisible Salamanders (v3) | id 444814380 |
 
 ## Production QA checklist (every video, before it's sent for review)
