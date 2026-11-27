@@ -5,9 +5,12 @@ Daily YouTube Shorts (2–3 a day) that teach lesser-known cybersecurity
 concepts. Each video teaches one real concept.
 
 ## Audience
-A security engineer with 4–5 years of experience. Explain every advanced concept
-from the basics: what the building block is, what people assume about it, and
-where that assumption breaks. Define every term on first use.
+Beginner-friendly: a security beginner must be able to follow every video.
+Still technical enough that a security engineer learns the real mechanism.
+- Use everyday analogies first (a door opening, twenty questions, a wax seal),
+  then the real term once (for example "a door: really, a network port").
+- At most two technical terms per video, each defined on screen.
+- One idea per scene. No jargon chains.
 
 ## Topics
 - Hidden gems only. Avoid well-known topics such as confused deputy, SQLi, XSS,
@@ -24,6 +27,8 @@ where that assumption breaks. Define every term on first use.
 - No assumptions and no invented stories. If a claim can't be verified, it's left out.
 
 ## Storytelling
+- Format: cartoon characters Rio and Mina talk on the rooftop; a glowing screen
+  rises for diagram moments.
 - Not a textbook reading. Hook with stakes → open question → basics → twist →
   mechanism → real-world payoff → fix → CTA ("Follow for more hidden gems").
 - Keep open loops, use short punchy lines and pauses, and put sound cues on twists.
