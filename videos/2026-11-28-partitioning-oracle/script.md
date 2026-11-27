@@ -1,3 +1,72 @@
+# Partitioning Oracle Attacks: v3 (final candidate)
+
+## Mechanism summary (every scene must match this)
+The Shadowsocks server silently drops packets it can't decrypt, but opens a UDP
+port when decryption works, and the attacker can detect that port. AES-GCM
+isn't key-committing, so one packet can decrypt under 4,091 password-derived
+keys. Port closed → all 4,091 crossed off. Port open → the password is in that
+batch, and the attacker finds it by offline trial decryption of the reply.
+Simulations: 1 in 5 passwords recovered with 124 packets vs ~60,000 for plain
+guessing. (Len, Grubbs, Ristenpart, USENIX Security 2021, §1, §4.)
+
+## Changes from v2 (review findings)
+- Accuracy: removed the "split in half / twenty questions" section. The 124-try
+  result comes from 4,091-password batches plus offline checking, not halving.
+- Title no longer overclaims (1 in 5, not every password).
+- Hook: "4,091" lands at 0.2 s (was 6 s).
+- Text kept inside the Shorts/Reels safe zone (x 40–1040, y 250–1540); captions
+  auto-shrink to fit.
+- No flicker or empty screens (checked automatically); stats rows show from
+  the start of the line.
+- Loudness normalised to −14 LUFS; stereo 48 kHz; square pixels; 9:16.
+- End tail cut to 1.4 s; Mina's expressions are friendlier (smirk on the twist).
+
+## Lines
+| # | Who | Line |
+|---|-----|------|
+| 1 | Mina | 4,091 passwords… in one try. Want to see how? |
+| 2 | Rio | Online? No way. That's one guess per try. |
+| 3 | Mina | Picture a server that hides behind a password. Send the wrong one… and it says nothing. No error. Just silence. |
+| 4 | Rio | So I can't even tell if I'm close. |
+| 5 | Mina | But send the right one, and the server quietly opens a door to wait for a reply. You can see that door from outside. That's a leak. A simple yes or no. |
+| 6 | Mina | Now the twist. Some encryption, like AES-GCM, lets you build one message that unlocks with thousands of passwords. |
+| 7 | Rio | Wait. One message… thousands of passwords? |
+| 8 | Mina | 4,091 of them. Door stays shut? All 4,091 are wrong. Crossed off in one go. Door opens? The password is in that batch, and the attacker finds it offline. |
+| 9 | Rio | Does that actually work? |
+| 10 | Mina | In simulations with real leaked passwords, one in five was cracked in just 124 tries. Normal guessing? Around 60,000. |
+| 11 | Mina | It's called a partitioning oracle attack. Researchers found it in a real proxy tool, Shadowsocks, and helped fix it. |
+| 12 | Rio | Follow 0xLore for more hidden gems. |
+
+## QA results (v3)
+- Pre-render checks passed: safe zone, captions fit, no flicker, no empty
+  screens, hook within 1.5 s, end tail ≤ 1.8 s, under 90 s.
+- Post-render: 1080×1920, SAR 1:1, DAR 9:16, 30 fps, H.264 yuv420p; AAC 48 kHz
+  stereo; −14.2 LUFS integrated, −3.2 dBFS peak; 64.9 s.
+- Reviewed one frame per second: no overlaps or clipping.
+
+## YouTube metadata (v3)
+- **Title:** 1 in 5 Passwords Cracked in 124 Tries 🔓
+- **Description:**
+  The server never says "wrong password". It doesn't need to. 🤫
+
+  This server stays silent when the password is wrong, but quietly opens a door
+  (a network port) when it's right. With AES-GCM, one message can test 4,091
+  passwords at once. In simulations with real leaked passwords, 1 in 5 were
+  cracked in just 124 tries. Normal guessing needed ~60,000.
+
+  📄 Source
+  • Len, Grubbs, Ristenpart. "Partitioning Oracle Attacks", USENIX Security 2021
+
+  Follow 0xLore for more hidden gems of cybersecurity.
+  #cybersecurity #infosec #passwords #encryption #shorts
+- **Tags:** cybersecurity, partitioning oracle, passwords, AES-GCM, shadowsocks,
+  encryption, infosec, hacking explained
+- **Settings:** type short, madeForKids false, category SCIENCE_TECHNOLOGY,
+  cover = cover.jpg
+
+---
+(older versions kept below for reference)
+
 # Partitioning Oracle Attacks: script v2 (beginner-friendly, rendered)
 
 Simplified after feedback: no ciphertext/oracle theory up front. The port is a

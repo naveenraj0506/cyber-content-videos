@@ -52,3 +52,24 @@ Based on Metricool's best-time data for the channel (checked 2026-11-28):
 | Date (IST) | Topic | Metricool post |
 |---|---|---|
 | 2026-11-28 16:00 | Invisible Salamanders (v3) | id 444814380 |
+
+## Production QA checklist (every video, before it's sent for review)
+1. **Before writing:** one-paragraph mechanism summary from the source. Every
+   scene and visual must match it, not just every sentence.
+2. **Automatic checks in the renderer (the render aborts on failure):** text
+   inside the safe zone (x 40–1040, y 250–1540), captions fit (auto-shrink), no
+   overlay flicker, no empty diagram screen over 0.25 s, hook within 1.5 s,
+   end tail ≤ 1.8 s, length ≤ 90 s.
+3. **Output format:** 1080×1920 9:16, SAR 1:1, 30 fps, H.264 yuv420p (high
+   profile), AAC 48 kHz stereo, −14 LUFS (±1). Cover 1080×1920, with its text
+   inside the centre 4:5 crop.
+4. **After rendering:** review one frame per second. Check that the title and
+   cover don't overclaim, and that the facts in the visuals match the sources.
+   Send the QA results with the video.
+
+## Platform safe zones (Shorts / Reels)
+- Top ~250 px: status bar and search/menu icons. Only the watermark (top
+  centre) goes here.
+- Bottom ~380 px: channel name, caption text, sound/remix bar. Characters' feet
+  can go here; never text.
+- Right ~140 px of the lower half: like/comment/share buttons.
