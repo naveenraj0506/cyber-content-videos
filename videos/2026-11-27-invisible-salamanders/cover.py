@@ -35,8 +35,9 @@ c((800, 1220), "key A", font("Inter-SemiBold.otf", 46), DIM)
 c((540, 1440), "and the encryption says", font("Inter-SemiBold.otf", 52), WHITE)
 c((540, 1520), "BOTH ARE REAL", font(XB, 96), YEL)
 # brand
-g.polygon([(330, 1760), (350, 1740), (370, 1760), (350, 1780)], fill=YEL)
-g.text((390, 1760), "DEEP CUT SECURITY", font=font("Inter-Bold.otf", 44), fill=DIM, anchor="lm")
+MONO = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", 64)
+g.polygon([(390, 1760), (414, 1736), (438, 1760), (414, 1784)], fill=YEL)
+g.text((460, 1760), "0xLore", font=MONO, fill=WHITE, anchor="lm")
 
 glow = np.array(lay.filter(ImageFilter.GaussianBlur(18))); glow[..., 3] = (glow[..., 3] * 0.8).astype(np.uint8)
 im = Image.alpha_composite(Image.alpha_composite(im.convert("RGBA"), Image.fromarray(glow)), lay).convert("RGB")

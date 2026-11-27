@@ -1,4 +1,4 @@
-"""Render the Invisible Salamanders Short (v3: salamander/kitten payoff + brand watermark).
+"""Render the Invisible Salamanders Short (v3: salamander/kitten payoff + 0xLore watermark).
 
 Usage: python3 render_v2.py <dir with kokoro model files> <output.mp4>
 Kokoro TTS per phrase -> proportional word timings -> PIL frames
@@ -243,7 +243,7 @@ def elements(sid):
     if sid == "fix":
         return [(0, lambda d: (box(d, (90, 520, 990, 700), outline=GREEN), ctext(d, (540, 610), "✔ key-committing AEAD", LBL, GREEN))),
                 ("follow", lambda d: (ctext(d, (540, 880), "FOLLOW", BIG, YEL), ctext(d, (540, 1000), "for more hidden gems", LBL, WHITE),
-                                      ctext(d, (540, 1120), "◆ DEEP CUT SECURITY", LBL_S, DIM)))]
+                                      ctext(d, (540, 1130), "◆ 0xLore", MONO, YEL)))]
     return []
 
 def glow_layer(fn):
@@ -259,7 +259,7 @@ for x in range(0, W, 60): _d.line([(x, 0), (x, H)], fill=GRID)
 for y in range(0, H, 60): _d.line([(0, y), (W, y)], fill=GRID)
 
 def make_wm():
-    f = font("Inter-Bold.otf", 34); txt = "DEEP CUT SECURITY"
+    f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", 40); txt = "0xLore"
     tw = int(ImageDraw.Draw(Image.new("RGBA", (1, 1))).textlength(txt, font=f))
     im = Image.new("RGBA", (tw + 70, 60), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.polygon([(14, 30), (30, 14), (46, 30), (30, 46)], fill=YEL + (150,))

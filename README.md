@@ -1,6 +1,6 @@
 # Cyber Content Videos
 
-Daily YouTube Shorts that explain lesser-known cybersecurity concepts as short
+**0xLore**: daily YouTube Shorts that explain lesser-known cybersecurity concepts as short
 stories. Each one is fact-checked against the original research papers,
 advisories or vendor documents.
 

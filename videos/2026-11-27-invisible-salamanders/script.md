@@ -44,7 +44,7 @@ in full on 2026-11-27).
   but the abuse report showed a kitten. Facebook called its secret chat
   messages salamanders. So this one became… an invisible salamander. Facebook
   patched it, and paid a bug bounty." [1] §1, §3, Fig. 3
-- Brand watermark "◆ DEEP CUT SECURITY" (top right) and cover.jpg.
+- Brand watermark "◆ 0xLore" (top right) and cover.jpg.
 
 ## YouTube metadata (v3)
 - **Title:** One Encrypted File. Two Secrets. 🦎
@@ -63,7 +63,7 @@ in full on 2026-11-27).
   • Albertini et al. "How to Abuse and Fix Authenticated Encryption Without
     Key Commitment", USENIX Security 2022
 
-  Follow Deep Cut Security for more hidden gems of cybersecurity.
+  Follow 0xLore for more hidden gems of cybersecurity.
   #cybersecurity #cryptography #infosec #encryption #shorts
 - **Tags:** cybersecurity, cryptography, AES-GCM, encryption, infosec,
   key commitment, invisible salamanders, facebook messenger
