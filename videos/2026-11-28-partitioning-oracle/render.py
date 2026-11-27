@@ -27,21 +27,18 @@ TITLE = font(XB, 84); BIGN = font(XB, 150)
 # ------------------------------------------------------------------ script
 # (speaker, mode, text). *word* = yellow keyword.
 LINES = [
- ("rio", "C", "Guessing someone's password over the network? One guess per try. Thousands of tries."),
- ("mina", "C", "Unless... every try tests *4,091* passwords at once."),
- ("mina", "D", "Meet *Shadowsocks*. An encrypted proxy, built to get around censorship. Your *password* becomes the key, and *AES-GCM* locks every packet."),
- ("mina", "D", "Send a packet with the wrong key... and the server says *nothing*. No error. Silence."),
- ("rio", "C", "So there's nothing to learn."),
- ("mina", "D", "Almost. When decryption *works*, the server opens a *port* to wait for a reply. And an attacker can spot it. A yes-or-no leak like that is called an *oracle*."),
- ("mina", "C", "Now the twist. AES-GCM isn't *key-committing*. One ciphertext can be valid under *many* keys at once."),
- ("rio", "C", "How many?"),
- ("mina", "D", "For Shadowsocks? *4,091* passwords in one packet. Built in *32* seconds."),
- ("mina", "D", "Port stays *closed*? All of them are wrong. Gone in one shot. Port *opens*? The password is in that group. So split it again... and again."),
- ("mina", "D", "That's a *partitioning* *oracle* attack. Every answer cuts the haystack."),
- ("rio", "C", "Okay. But does it work for real?"),
- ("mina", "D", "In simulations with real leaked passwords, one in five fell after just *124* packets. Plain guessing needed around *60,000*."),
- ("mina", "C", "The researchers disclosed it, and helped the Shadowsocks community *fix* it."),
- ("mina", "C", "The fix? Once again. *Key-committing* encryption."),
+ ("rio", "C", "Guessing a password online is slow. One guess... one try."),
+ ("mina", "C", "What if one try could test *4,091* passwords at once?"),
+ ("mina", "D", "Picture a server that hides behind a password. Send the wrong one... and it says *nothing*. No error. Just silence."),
+ ("rio", "C", "So I can't even tell if I'm close."),
+ ("mina", "D", "But send the *right* one, and the server quietly opens a *door* to wait for a reply. And you can see that door from outside. That's a *leak*. A simple yes or no."),
+ ("mina", "C", "Now the twist. Some encryption, like AES-GCM, lets you build one message that unlocks with *thousands* of different passwords."),
+ ("rio", "C", "Wait. One message, thousands of passwords?"),
+ ("mina", "D", "*4,091* of them. Door stays *shut*? All 4,091 are wrong. Gone in one go. Door *opens*? The password is in that group. So *split* it in half... and try *again*."),
+ ("mina", "D", "Like a game of *twenty* *questions*. Every answer cuts the list in half."),
+ ("rio", "C", "Does that actually work?"),
+ ("mina", "D", "In simulations with real leaked passwords, one in five was cracked in just *124* tries. Normal guessing? Around *60,000*."),
+ ("mina", "C", "It's called a *partitioning* *oracle* attack. Researchers found it in a real proxy tool, Shadowsocks, and helped fix it."),
  ("rio", "C", "Follow *0xLore* for more hidden gems."),
 ]
 VOICE = {"rio": "am_michael", "mina": "af_heart"}
@@ -124,7 +121,7 @@ BOOM = np.sin(2 * np.pi * np.cumsum(70 * np.exp(-x * 2.5) + 35) / SR) * np.exp(-
 x2 = np.arange(int(0.12 * SR)) / SR; BLIP = np.sin(2 * np.pi * 880 * x2) * np.exp(-x2 * 30) * 0.12
 x3 = np.arange(int(0.4 * SR)) / SR
 WHOOSH = np.convolve(np.random.default_rng(2).standard_normal(len(x3)), np.ones(40) / 40, "same") * np.sin(np.pi * x3 / x3[-1]) * 0.3
-BOOMS = [W_(1, "4091"), W_(6, "twist"), W_(10, "partitioning")]
+BOOMS = [W_(1, "4091"), W_(5, "twist"), W_(11, "partitioning")]
 for b in BOOMS: add(BOOM, b)
 prev = "C"
 for li, L_ in enumerate(LINES):
@@ -182,8 +179,8 @@ STYLE = {
  "mina": dict(x=790, face=-1, skin=(222, 172, 140), hair=(70, 50, 50), top=(40, 160, 150), pants=(150, 150, 160), hairstyle="bun"),
 }
 FEET = 1640
-SURPRISE = [(LS(1), LE(1)), (W_(8, "4091") - 0.2, LE(8)), (W_(12, "124") - 0.2, LE(12) + 0.5)]   # Rio's surprised face
-SHRUG = [(LS(4), LE(4) + 0.3)]
+SURPRISE = [(LS(1), LE(1)), (LS(6), LE(6) + 0.3), (W_(10, "124") - 0.2, LE(10) + 0.5)]   # Rio's surprised face
+SHRUG = [(LS(3), LE(3) + 0.3)]
 
 def draw_char(d, name, t, fi):
     st = STYLE[name]; S = SS; f = st["face"]; x0 = st["x"]
@@ -313,70 +310,73 @@ def sign(text, col=YEL, sub=None, y=330):
         if sub: ctext(d, (540, y + 50), sub, LBL_S, DIM)
     return fn
 
-# line 0-1 (C)
+def door(d, cx, cy, open_, col):
+    box(d, (cx - 80, cy - 120, cx + 80, cy + 120), col, fill=(30, 24, 20, 255) if open_ else PANEL + (240,))
+    if open_:
+        d.polygon([(cx - 80, cy - 120), (cx - 10, cy - 95), (cx - 10, cy + 135), (cx - 80, cy + 120)], fill=(120, 90, 60), outline=INK)
+        d.polygon([(cx - 10, cy - 95), (cx + 80, cy - 120), (cx + 80, cy + 120), (cx - 10, cy + 135)], fill=(255, 230, 150, 180))
+    else:
+        d.ellipse((cx + 40, cy - 8, cx + 56, cy + 8), fill=col)
+def grid_state(state):
+    def fn(d):
+        col = {"all": YEL, "shut": RED, "open": GREEN, "half": YEL, "quarter": YEL}[state]
+        box(d, (80, 600, 1000, 960), col)
+        dim = {"half": (lambda c, r: c >= 6), "quarter": (lambda c, r: c >= 3)}.get(state)
+        keygrid(d, 130, 650, 12, 5, col, cross=state == "shut", dimmed=dim)
+        if state in ("half", "quarter"): x_ = 540 if state == "half" else 330; d.line([(x_, 620), (x_, 880)], fill=WHITE, width=6)
+        ctext(d, (540, 920), {"all": "4,091 passwords · 1 message", "shut": "all 4,091 wrong", "open": "password is in here",
+                              "half": "split in half", "quarter": "...and again"}[state], LBL, col)
+    return fn
+# 0-1 (C)
 at(LS(0), LE(0), sign("guess #1  ✘   #2  ✘   #3  ✘", RED))
-at(W_(1, "4091"), LE(1), lambda d: (ctext(d, (540, 330), "4,091", BIGN, YEL), ctext(d, (540, 450), "passwords per try", LBL, WHITE)))
-# line 2 (D) Shadowsocks setup
-L2 = 2
-at(LS(L2), LE(L2), lambda d: (ctext(d, (540, 250), "SHADOWSOCKS", TITLE, YEL), ctext(d, (540, 330), "encrypted proxy · beats censorship", LBL_S, DIM)))
-at(W_(L2, "password"), LE(L2), lambda d: (box(d, (80, 450, 380, 560), WHITE), ctext(d, (230, 505), "password", LBL_S, WHITE),
-                                          arrow(d, (390, 505), (480, 505)), box(d, (490, 450, 640, 560), DIM), ctext(d, (565, 505), "hash", LBL_S, DIM),
-                                          arrow(d, (650, 505), (740, 505)), box(d, (750, 450, 1000, 560)), ctext(d, (875, 505), "KEY", LBL, YEL)))
-at(W_(L2, "aes-gcm"), LE(L2), lambda d: (packet(d, 540, 800, YEL, "AES-GCM"), ctext(d, (540, 940), "every packet locked", LBL_S, DIM)))
-# line 3 (D) silence
-L3 = 3
-at(LS(L3), LE(L3), lambda d: (packet(d, 230, 520, RED, "wrong key"), arrow(d, (380, 520), (600, 520), RED), server(d, 800, 520)))
-at(W_(L3, "nothing"), LE(L3), lambda d: (ctext(d, (800, 300), "...", TITLE, DIM), ctext(d, (540, 850), "NO ERROR.", TITLE, WHITE),
-                                         ctext(d, (540, 960), "SILENCE.", TITLE, DIM)))
-# line 4 (C) shrug: small sign
-at(LS(4), LE(4), sign("nothing to learn?", DIM), blip=False)
-# line 5 (D) the port oracle
-L5 = 5
-at(LS(L5), W_(L5, "works"), lambda d: (server(d, 540, 520),))
-at(W_(L5, "works"), LE(L5), lambda d: (packet(d, 220, 380, GREEN, "right key"), arrow(d, (360, 410), (420, 460), GREEN), server(d, 540, 520, GREEN, True)))
-at(W_(L5, "port"), LE(L5), lambda d: (box(d, (720, 440, 1000, 600), GREEN), ctext(d, (860, 495), "PORT", LBL, GREEN), ctext(d, (860, 555), "opens", LBL_S, GREEN)))
-at(W_(L5, "attacker"), LE(L5), lambda d: (box(d, (90, 760, 990, 860), RED), ctext(d, (540, 810), "attacker can see the port", LBL_S, RED)))
-at(W_(L5, "oracle"), LE(L5), lambda d: (box(d, (90, 900, 990, 1090)), ctext(d, (540, 960), "ORACLE", TITLE, YEL), ctext(d, (540, 1040), "a yes / no leak", LBL_S, WHITE)))
-# line 6 (C) twist callback
-at(W_(6, "key-committing"), LE(6), sign("AES-GCM: NOT key-committing", RED, "remember the invisible salamanders?"))
-# line 7 (C) how many
-at(LS(7), LE(7), sign("how many?", WHITE), blip=False)
-# line 8 (D) 4,091 in one packet
-L8 = 8
-at(LS(L8), LE(L8), lambda d: (packet(d, 540, 300, YEL, "1 packet"), arrow(d, (540, 380), (540, 450))))
-at(W_(L8, "4091"), LE(L8), lambda d: (box(d, (80, 470, 1000, 890)), keygrid(d, 130, 520, 12, 7, YEL),
-                                       ctext(d, (540, 850), "4,091 password guesses", LBL, YEL)))
-at(W_(L8, "32"), LE(L8), lambda d: (box(d, (340, 940, 740, 1080), GREEN), ctext(d, (540, 1010), "built in 32 s", LBL, GREEN)))
-# line 9 (D) partition
-L9 = 9
-at(LS(L9), W_(L9, "opens"), lambda d: (server(d, 540, 310, RED), ctext(d, (540, 545), "port CLOSED", LBL, RED)))
-at(W_(L9, "all"), W_(L9, "opens"), lambda d: (box(d, (80, 600, 1000, 1000), RED), keygrid(d, 130, 650, 12, 6, RED, cross=True),
-                                              ctext(d, (540, 960), "all 4,091 ruled out", LBL, RED)))
-at(W_(L9, "opens"), LE(L9), lambda d: (server(d, 540, 310, GREEN, True), ctext(d, (540, 545), "port OPEN", LBL, GREEN)))
-at(W_(L9, "password"), W_(L9, "split"), lambda d: (box(d, (80, 600, 1000, 1000), GREEN), keygrid(d, 130, 650, 12, 6, GREEN),
-                                                   ctext(d, (540, 960), "password is in here", LBL, GREEN)))
-at(W_(L9, "split"), W_(L9, "again", 2), lambda d: (box(d, (80, 600, 1000, 1000), YEL), keygrid(d, 130, 650, 12, 6, YEL, dimmed=lambda c, r: c >= 6),
-                                                   d.line([(540, 620), (540, 930)], fill=WHITE, width=6), ctext(d, (540, 960), "split in half", LBL, YEL)))
-at(W_(L9, "again", 2), LE(L9), lambda d: (box(d, (80, 600, 1000, 1000), YEL), keygrid(d, 130, 650, 12, 6, YEL, dimmed=lambda c, r: c >= 3),
-                                          d.line([(330, 620), (330, 930)], fill=WHITE, width=6), ctext(d, (540, 960), "...and again", LBL, YEL)))
-# line 10 (D) name banner
-at(W_(10, "partitioning"), LE(10), lambda d: (d.rounded_rectangle((80, 420, 1000, 720), 24, fill=(200, 40, 50, 255), outline=INK, width=8),
-                                              ctext(d, (540, 520), "PARTITIONING", font(XB, 100), WHITE), ctext(d, (540, 630), "ORACLE ATTACK", font(XB, 86), YEL)))
-at(W_(10, "every"), LE(10), lambda d: ctext(d, (540, 880), "every answer cuts the haystack", LBL_S, WHITE))
-# line 11 (C)
-at(LS(11), LE(11), sign("does it work for real?", WHITE), blip=False)
-# line 12 (D) stats
-L12 = 12
-at(LS(L12), LE(L12), lambda d: (ctext(d, (540, 260), "simulated with real leaked passwords", LBL_S, DIM),
-                                ctext(d, (540, 340), "1 in 5 passwords recovered", LBL, WHITE)))
-at(W_(L12, "124"), LE(L12), lambda d: (ctext(d, (150, 520), "attack", LBL_S, YEL), d.rounded_rectangle((260, 490, 290, 550), 6, fill=YEL),
-                                       ctext(d, (480, 520), "124 packets", LBL, YEL)))
-at(W_(L12, "60000"), LE(L12), lambda d: (ctext(d, (150, 700), "guessing", LBL_S, RED), d.rounded_rectangle((260, 670, 1000, 730), 6, fill=RED),
-                                         ctext(d, (630, 800), "~60,000 packets", LBL, RED)))
-# line 13-15 (C)
-at(W_(13, "disclosed"), LE(13), sign("disclosed ✔   fixed ✔", GREEN))
-at(W_(14, "key-committing"), LE(14), sign("✔ key-committing encryption", GREEN))
-at(LS(15), TOTAL + 1, lambda d: (ctext(d, (540, 330), "FOLLOW", font(XB, 130), YEL), ctext(d, (540, 450), "◆ 0xLore", ImageFont.truetype(MONOF, 64), WHITE)))
+at(W_(1, "4091"), LE(1), lambda d: (ctext(d, (540, 330), "4,091", BIGN, YEL), ctext(d, (540, 450), "passwords per try?!", LBL, WHITE)))
+# 2 (D) silent server
+at(LS(2), LE(2), lambda d: (server(d, 760, 420), ctext(d, (540, 230), "a password-protected server", LBL_S, DIM)))
+at(W_(2, "wrong"), LE(2), lambda d: (box(d, (70, 360, 430, 480), RED), ctext(d, (250, 420), "wrong password", LBL_S, RED), arrow(d, (440, 420), (590, 420), RED)))
+at(W_(2, "nothing"), LE(2), lambda d: (ctext(d, (540, 800), "NO ERROR.", TITLE, WHITE), ctext(d, (540, 910), "JUST SILENCE.", TITLE, DIM)))
+# 3 (C)
+at(LS(3), LE(3), sign("am I even close?", DIM), blip=False)
+# 4 (D) the door = the leak
+at(LS(4), LE(4), lambda d: (box(d, (70, 360, 430, 480), GREEN), ctext(d, (250, 420), "right password", LBL_S, GREEN),
+                            arrow(d, (440, 420), (590, 420), GREEN), server(d, 760, 420, GREEN, True)))
+at(W_(4, "door"), LE(4), lambda d: (door(d, 300, 820, True, GREEN), ctext(d, (650, 780), "a door opens", LBL, GREEN),
+                                    ctext(d, (650, 850), "(a network port)", LBL_S, DIM)))
+at(W_(4, "see"), LE(4), lambda d: ctext(d, (650, 930), "visible from outside", LBL_S, YEL))
+at(W_(4, "leak"), LE(4), lambda d: (box(d, (150, 1000, 930, 1120)), ctext(d, (540, 1060), "LEAK = a yes / no answer", LBL, YEL)))
+# 5-6 (C) twist
+at(W_(5, "thousands"), LE(5), sign("1 message, unlocks with 1000s of passwords", YEL, "possible with AES-GCM"))
+at(LS(6), LE(6), sign("one message?!", WHITE), blip=False)
+# 7 (D) split
+at(LS(7), W_(7, "shut"), grid_state("all"))
+at(W_(7, "shut"), W_(7, "opens"), lambda d: (door(d, 540, 400, False, RED), ctext(d, (540, 560), "door stays shut", LBL, RED)))
+at(W_(7, "all"), W_(7, "opens"), grid_state("shut"))
+at(W_(7, "opens"), LE(7), lambda d: (door(d, 540, 400, True, GREEN), ctext(d, (540, 560), "door opens", LBL, GREEN)))
+at(W_(7, "opens"), W_(7, "split"), grid_state("open"))
+at(W_(7, "split"), W_(7, "again"), grid_state("half"))
+at(W_(7, "again"), LE(7), grid_state("quarter"))
+# 8 (D) twenty questions
+def halving(d):
+    ctext(d, (540, 260), "TWENTY QUESTIONS", TITLE, YEL)
+    for i, (n_, w_) in enumerate([("4,091", 880), ("2,046", 440), ("1,023", 220), ("512", 110), ("...", 0), ("1", 14)]):
+        y_ = 380 + i * 110
+        if w_: d.rounded_rectangle((100, y_, 100 + w_, y_ + 60), 10, fill=YEL if n_ != "1" else GREEN)
+        ctext(d, (100 + max(w_, 0) + 110 if w_ < 700 else 540, y_ + 30), n_ if n_ != "1" else "1 → the password", LBL_S, WHITE if w_ >= 700 else (GREEN if n_ == "1" else WHITE))
+at(LS(8), LE(8), halving)
+# 9 (C)
+at(LS(9), LE(9), sign("does it actually work?", WHITE), blip=False)
+# 10 (D) stats
+at(LS(10), LE(10), lambda d: (ctext(d, (540, 260), "simulated with real leaked passwords", LBL_S, DIM),
+                              ctext(d, (540, 340), "1 in 5 passwords cracked", LBL, WHITE)))
+at(W_(10, "124"), LE(10), lambda d: (ctext(d, (150, 520), "this trick", LBL_S, YEL), d.rounded_rectangle((280, 490, 310, 550), 6, fill=YEL),
+                                     ctext(d, (480, 520), "124 tries", LBL, YEL)))
+at(W_(10, "60000"), LE(10), lambda d: (ctext(d, (150, 700), "guessing", LBL_S, RED), d.rounded_rectangle((280, 670, 1000, 730), 6, fill=RED),
+                                       ctext(d, (640, 800), "~60,000 tries", LBL, RED)))
+# 11 (C) name + real world
+at(W_(11, "partitioning"), LE(11), lambda d: (d.rounded_rectangle((80, 250, 1000, 520), 24, fill=(200, 40, 50, 255), outline=INK, width=8),
+                                              ctext(d, (540, 340), "PARTITIONING", font(XB, 100), WHITE), ctext(d, (540, 445), "ORACLE ATTACK", font(XB, 86), YEL)))
+at(W_(11, "shadowsocks"), LE(11), lambda d: (box(d, (160, 580, 920, 690), GREEN), ctext(d, (540, 635), "found in Shadowsocks · fixed ✔", LBL_S, GREEN)))
+# 12 (C) end
+at(LS(12), TOTAL + 1, lambda d: (ctext(d, (540, 330), "FOLLOW", font(XB, 130), YEL), ctext(d, (540, 450), "◆ 0xLore", ImageFont.truetype(MONOF, 64), WHITE)))
 
 for b in BLIPS: add(BLIP, b)
 mix = (music + sfx) * fade; mix[:len(voice)] += voice
@@ -434,7 +434,7 @@ def render(fi):
     d = ImageDraw.Draw(im); d.rectangle((0, 0, int(W * t / TOTAL), 10), fill=YEL)
     c = next((c for c in chunks if c[0]["start"] - 0.05 <= t < c[-1]["end"] + 0.2), None)
     if c:
-        texts = [w["text"].upper() for w in c]; widths = [d.textlength(s + " ", font=CAP) for s in texts]
+        texts = [w["text"] if "0xLore" in w["text"] else w["text"].upper() for w in c]; widths = [d.textlength(s + " ", font=CAP) for s in texts]
         x_ = (W - sum(widths)) / 2; y_ = 1785
         for w, s, wd in zip(c, texts, widths):
             if t >= w["start"] - 0.05:
@@ -458,7 +458,7 @@ def make_cover(path):
         ctext(d, (540, 230), "4,091", font(XB, 220), YEL)
         ctext(d, (540, 390), "PASSWORDS.", font(XB, 120), WHITE)
         d.rounded_rectangle((150, 470, 930, 610), 22, fill=(200, 40, 50, 255), outline=INK, width=8)
-        ctext(d, (540, 540), "ONE PACKET.", font(XB, 100), WHITE)
+        ctext(d, (540, 540), "ONE TRY.", font(XB, 100), WHITE)
         ctext(d, (540, 1830), "◆ 0xLore", ImageFont.truetype(MONOF, 60), WHITE)
     g, p = glow(fn); im.alpha_composite(g, p)
     im.convert("RGB").save(path, quality=92)

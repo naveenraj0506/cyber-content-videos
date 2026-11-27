@@ -1,3 +1,27 @@
+# Partitioning Oracle Attacks: script v2 (beginner-friendly, rendered)
+
+Simplified after feedback: no ciphertext/oracle theory up front. The port is a
+"door", and the halving is "twenty questions". Facts unchanged, all from
+Len, Grubbs, Ristenpart, USENIX Security 2021.
+
+| # | Who | Line | Source |
+|---|-----|------|--------|
+| 1 | Rio | Guessing a password online is slow. One guess… one try. | general |
+| 2 | Mina | What if one try could test 4,091 passwords at once? | §4: k = 4,091 (UDP size limit) |
+| 3 | Mina | Server hides behind a password; wrong one → says nothing. No error. Just silence. | §4: "If decryption fails, no error message is sent back" |
+| 4 | Rio | So I can't even tell if I'm close. | — |
+| 5 | Mina | Right one → server opens a door (network port) to wait for a reply; visible from outside; a yes/no leak. | §4: opens "an ephemeral UDP port in response to a valid request (and does not otherwise)" |
+| 6 | Mina | Some encryption, like AES-GCM, lets you build one message that unlocks with thousands of passwords. | Abstract and §3: key multi-collisions for AES-GCM |
+| 7 | Rio | One message, thousands of passwords? | — |
+| 8 | Mina | 4,091 of them. Door shut → all wrong. Door opens → password in group, split in half, try again. | §2 and §4: iterate on the remaining passwords |
+| 9 | Mina | Like twenty questions: every answer cuts the list in half. | §2: "a simple adaptive binary search" |
+| 10 | Mina | Simulations with real leaked passwords: 1 in 5 cracked in 124 tries; normal guessing ~60,000. | §1 |
+| 11 | Mina | Called a partitioning oracle attack. Found in Shadowsocks, and the researchers helped fix it. | Title; §1: "responsibly disclosed … worked with them to help mitigate" |
+| 12 | Rio | Follow 0xLore for more hidden gems. | — |
+
+---
+(v1, kept for reference)
+
 # Partitioning Oracle Attacks: script v1 (for review)
 
 **Style:** a mix of the two looks. Cartoon scenes with Rio and Mina carry the
@@ -48,14 +72,14 @@ Every fact cites the paper in the Sources section below (§ = section).
   need to." Then sources and hashtags.
 
 ## Final YouTube metadata (v1 render)
-- **Title:** 124 Packets to Crack a Password 🔓
+- **Title:** 124 Tries to Crack a Password 🔓
 - **Description:**
   The server never says "wrong password". It doesn't need to. 🤫
 
   Shadowsocks silently drops bad packets, but it opens a port when decryption
   works. Because AES-GCM isn't key-committing, one packet can be valid for
   4,091 passwords at once. Each answer cuts the haystack. In simulations with
-  real leaked passwords, 1 in 5 fell after just 124 packets.
+  real leaked passwords, 1 in 5 were cracked in just 124 tries.
 
   📄 Source
   • Len, Grubbs, Ristenpart. "Partitioning Oracle Attacks", USENIX Security 2021
